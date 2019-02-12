@@ -26,7 +26,7 @@ public class Quantity {
     }
 
     private double asTeaspoonAmount() {
-        return unit.convertTo(amount, Unit.TEASPOON);
+        return unit.convertAmount(amount, Unit.TEASPOON);
     }
 
     @Override
@@ -34,10 +34,24 @@ public class Quantity {
         return "Quantity{" +
                 "amount=" + amount +
                 ", unit=" + unit +
+                ", asTeaspoonAmount=" + asTeaspoonAmount() +
                 '}';
     }
 
     public Quantity add(Quantity other) {
         return new Quantity(this.asTeaspoonAmount() + other.asTeaspoonAmount(), Unit.TEASPOON);
+    }
+
+    public Quantity subtract(Quantity other) {
+        return add(other.negate());
+    }
+
+    public Quantity negate() {
+        return new Quantity(-amount, unit);
+    }
+
+    public Quantity transformUnit(Unit targetUnit) {
+        double targetAmount = unit.convertAmount(amount, targetUnit);
+        return new Quantity(targetAmount, targetUnit);
     }
 }
